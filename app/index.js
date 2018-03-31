@@ -9,9 +9,9 @@ dotenv.config();
 const host = process.env.HOST;
 const port = process.env.PORT;
 
-const server = http.createServer((req, res) => {
-  res.write('Test');
-  req.pipe(res);
+const server = http.createServer((request, response) => {
+  response.write('Test');
+  request.pipe(response);
 });
 
 server.listen(port, host, () => { logger.info(`Server listening at http://${host}:${port}.\n`); });
