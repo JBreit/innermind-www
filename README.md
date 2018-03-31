@@ -10,7 +10,7 @@ ECMAScript 2015-2017 MongoDB, ExpressJS, NodeJS HTTP Web Server
 1. Node.js >= 8.11.1
 2. NPM >= 5.6.0
 3. ESLint >= 4.19.1
-4. Node Sass > 4.8.3
+4. Node Sass >= 4.8.3
 5. PostCSS >= 6.0.21
 6. Webpack >= 4.4.1
 
