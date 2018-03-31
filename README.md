@@ -1,5 +1,4 @@
 # Innermind WWW Server
-======================
 [![MIT License][license-image]][license-url]
 
 [license-url]: LICENSE
