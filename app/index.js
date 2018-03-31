@@ -56,6 +56,9 @@ const onError = (err) => {
 };
 
 const server = http.createServer((request, response) => {
+  console.log(request.method, request.url);
+  console.log(request.url);
+
   response.write('Test');
   request.pipe(response);
 });
