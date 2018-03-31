@@ -20,8 +20,8 @@ const normalizePort = (val) => {
   return false;
 };
 
-const host = process.env.HOST;
-const port = normalizePort(process.env.PORT);
+const host = process.env.HOST || 'http://127.0.0.1';
+const port = normalizePort(process.env.PORT || 3000);
 
 const onListening = () => {
   let addr = server.address();
