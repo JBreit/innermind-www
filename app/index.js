@@ -1,33 +1,83 @@
-const app = (request, response) => {
-  const { headers, method, url } = request;
-  let body = [];
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const favicon = require('serve-favicon');
+const path = require('path');
+const logger = require('../utils/logger');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
+const session = require('express-session');
+const db = require('../config').db;
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
+const bluebird = require('bluebird');
+const index = require('./routes/index');
+const users = require('./routes/users');
+const __public = path.join(__dirname, 'public');
+const app = express();
 
-  if (request.method === 'POST' && request.url === '/echo') {
-    request.pipe(response);
-  } else {
+const connection = mongoose.createConnection(db.url, {
+  keepAlive: true,
+  reconnectTries: 30,
+  socketTimeoutMS: 0
+});
 
-    request.on('error', (error) => {
-      process.stderr.write(error.stack);
-    });
-    
-    request.on('data', (chunk) => {
-      body.push(chunk);
-    });
+connection.on('error', console.error.bind(console, 'connection error:'));
 
-    request.on('end', () => {
-      body = Buffer.concat(body).toString();
+mongoose.Promise = global.Promise;
+mongoose.Promise = bluebird;
 
-      response.on('error', (error) => {
-        process.stderr.write(error);
-      });
+app.enable('verbose errors');
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, '../', 'views'));
+app.set('json spaces', 2);
 
-      response.writeHead(200, { 'Content-Type': 'application/json' });
+app.use(morgan('combined', {steam: logger.stream}));
+app.use(favicon(path.join(__public, 'img', 'favicon.ico')));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(methodOverride('X-HTTP-Override'));
+app.use(express.static(__public));
+app.use(session({
+  secret: 'SECRET',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60 * 60 * 1000
+  },
+  store: new MongoStore({
+    url: db.url,
+    mongooseConnection: connection,
+    ttl: 14 * 24 * 60 * 60
+  })
+}));
 
-      const responseBody = { headers, method, url, body };
+app.use('/', index);
+app.use('/users', users);
 
-      response.end(JSON.stringify(responseBody, null, 2));
-    });
-  }
-};
+app.use(function (req, res, next) {
+  'use strict';
+
+  var err = new Error('Not Found');
+
+  err.status = 404;
+  next(err);
+});
+
+app.use(function (err, req, res, next) {
+  'use strict';
+
+  /*res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development'
+      ? err
+      : {};*/
+
+  res.status(err.status || 500).render('error.hbs', {
+    message: err.message,
+    url: req.originalUrl,
+    error: err
+  });
+});
 
 module.exports = app;

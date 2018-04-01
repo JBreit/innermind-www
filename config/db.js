@@ -1,3 +1,3 @@
 module.exports = {
-  url: 'mongodb://10.0.0.18:27017/innermind'
+  url: 'mongodb://127.0.0.1:27017/innermind'
 };

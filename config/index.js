@@ -14,7 +14,7 @@ dotenv.config();
 
 const config = {
   db: {
-    url: String('mongodb://10.0.0.18:27017/innermind')
+    url: String('mongodb://127.0.0.1:27017/innermind')
   },
   env: String(process.env.NODE_ENV),
   server: {
