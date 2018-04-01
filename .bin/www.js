@@ -1,28 +1,26 @@
-const dotenv = require('dotenv');
 const http = require('http');
 const path = require('path');
+const config = require('../config');
 const db = require('../config/db');
 const app = require('../app');
 const logger = require('../utils/logger');
 
-dotenv.config();
+const normalizePort = (value) => {
+  let port = parseInt(value, 10);
 
-const normalizePort = (val) => {
-  var port = parseInt( val, 10 );
-
-  if ( isNaN( port ) ) {
-    return val;
+  if (isNaN(port)) {
+    return value;
   }
 
-  if ( port >= 0 ) {
+  if (port >= 0) {
     return port;
   }
 
   return false;
 };
 
-const host = process.env.HOST || 'http://127.0.0.1';
-const port = normalizePort(process.env.PORT || 3000);
+const host = config.server.host;
+const port = normalizePort(config.server.port);
 
 const onListening = () => {
   let addr = server.address();
