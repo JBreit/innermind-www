@@ -1,9 +1,27 @@
 const app = (request, response) => {
-  console.log(request.method, request.url);
+  const { headers, method, url } = request;
+  let body = [];
 
-  response.write(`${request.method} `);
-  response.write(request.url);
-  request.pipe(response);
+  request
+    .on('error', (error) => {
+      process.stderr.write(error.stack);
+    })
+    .on('data', (chunk) => {
+      body.push(chunk);
+    })
+    .on('end', () => {
+      body = Buffer.concat(body).toString();
+      response
+        .on('error', (error) => {
+          process.stderr.write(error);
+        });
+
+      response.writeHead(200, {'Content-Type': 'application/json'});
+
+      const responseBody = { headers, method, url, body };
+
+      response.end(JSON.stringify(responseBody, null, 2));
+    });
 };
 
 module.exports = app;

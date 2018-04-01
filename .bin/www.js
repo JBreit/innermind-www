@@ -1,7 +1,6 @@
 const http = require('http');
 const path = require('path');
 const config = require('../config');
-const db = require('../config/db');
 const app = require('../app');
 const logger = require('../utils/logger');
 
@@ -19,16 +18,13 @@ const normalizePort = (value) => {
   return false;
 };
 
-const host = config.server.host;
-const port = normalizePort(config.server.port);
-
 const onListening = () => {
   let addr = server.address();
   let bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
 
-  logger.info(`> Server listening at http://${host}:${port}.\n`)
+  logger.info(`> Server listening at http://${addr.address}:${addr.port}.\n`)
 };
 
 const onError = (err) => {
@@ -58,5 +54,8 @@ const server = http.createServer(app);
 
 server.on('listening', onListening);
 server.on('error', onError);
+
+const host = config.server.host;
+const port = normalizePort(config.server.port);
 
 server.listen(port, host);
