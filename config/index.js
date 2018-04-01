@@ -13,10 +13,10 @@ dotenv.config();
 });
 
 const config = {
-  env: String(process.env.NODE_ENV || 'development'),
+  env: String(process.env.NODE_ENV),
   server: {
-    host: String(process.env.HOST || '127.0.0.1'),
-    port: Number(process.env.PORT || 3000)
+    host: String(process.env.HOST),
+    port: Number(process.env.PORT)
   }
 };
 
