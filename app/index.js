@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const { json, urlencoded } = require('body-parser');
 const cookieParser = require('cookie-parser');
 const favicon = require('serve-favicon');
 const path = require('path');
@@ -32,10 +32,10 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../', 'views'));
 app.set('json spaces', 2);
 
-app.use(morgan('combined', {steam: logger.stream}));
+app.use(morgan('combined', { steam: logger.stream }));
 app.use(favicon(path.join(__public, 'img', 'favicon.ico')));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(urlencoded({ extended: true }));
+app.use(json());
 app.use(cookieParser());
 app.use(methodOverride('X-HTTP-Override'));
 app.use(express.static(__public));
