@@ -29,11 +29,11 @@ mongoose.Promise = bluebird;
 
 app.enable('verbose errors');
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, '../', 'views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('json spaces', 2);
 
 app.use(morgan('combined', { steam: logger.stream }));
-app.use(favicon(path.join(__public, 'img', 'favicon.ico')));
+app.use(favicon(path.join(__public, 'assets', 'img', 'favicon.ico')));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cookieParser());
