@@ -38,7 +38,7 @@ module.exports = {
     'no-alert': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    "no-underscore-dangle": ["error", { "allow": ["__public"] }],
+    "no-underscore-dangle": ["error", { "allow": ["__public", "_session"] }],
     "no-unused-vars": ["error", { "args": "none" }]
   }
 };

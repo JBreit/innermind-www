@@ -28,7 +28,9 @@ const onListening = () => {
   //   ? 'pipe ' + addr
   //   : 'port ' + addr.port;
 
-  logger.info(`> Server listening at http://${addr.address}:${addr.port}.\n`);
+  const message = `> Server listening at http://${host}:${port}.\n`;
+
+  logger.info(message);
 };
 
 const onError = (err) => {
