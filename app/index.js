@@ -1,7 +1,6 @@
 const express = require('express');
 const { json, urlencoded } = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { readFileSync } = require('fs');
 const favicon = require('serve-favicon');
 const hbs = require('hbs');
 const { join } = require('path');
@@ -15,6 +14,7 @@ const MongoStore = require('connect-mongo')(session);
 const bluebird = require('bluebird');
 const index = require('./routes/index');
 const users = require('./routes/users');
+
 const __public = join(__dirname, 'public');
 const app = express();
 
@@ -25,27 +25,28 @@ connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.Promise = global.Promise;
 mongoose.Promise = bluebird;
 
-let blocks = {};
+const blocks = {};
 
 hbs.registerHelper('extend', (name, context) => {
-    let block = blocks[name];
-    if (!block) {
-        block = blocks[name] = [];
-    }
+  let block = blocks[name];
+  if (!block) {
+    blocks[name] = [];
+    block = blocks[name];
+  }
 
-    block.push(context.fn(this));
+  block.push(context.fn(this));
 });
 
 hbs.registerHelper('block', (name) => {
-    let val = (blocks[name] || []).join('\n');
+  const val = (blocks[name] || []).join('\n');
 
-    blocks[name] = [];
+  blocks[name] = [];
 
-    return val;
+  return val;
 });
 
 hbs.localsAsTemplateData(app);
-hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerPartials(join(__dirname, 'views', 'partials'));
 
 app.enable('verbose errors');
 app.set('view engine', 'hbs');
@@ -76,22 +77,20 @@ app.use(session({
 app.use('/', index);
 app.use('/users', users);
 
-app.use(function (req, res, next) {
-  'use strict';
-
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
 
   err.status = 404;
   next(err);
 });
 
-app.use(function (err, req, res, next) {
-  'use strict';
-
-  /*res.locals.message = err.message;
+app.use((err, req, res, next) => {
+  /*
+  res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development'
-      ? err
-      : {};*/
+    ? err
+    : {};
+  */
 
   res.status(err.status || 500).render('error.hbs', {
     message: err.message,

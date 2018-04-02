@@ -1,6 +1,6 @@
 module.exports = {
-  "name": "innermind-www",
-  "version": "0.0.1",
+  // "name": "innermind-www",
+  // "version": "0.0.1",
   "extends": "airbnb-base",
   "env": {
     "browser": true,
@@ -31,6 +31,14 @@ module.exports = {
   "rules": {
     "comma-dangle": ["error", "never"],
     "indent": ["error", 2, { "SwitchCase": 1 }],
-    "linebreak-style": ["error", process.env.NODE_ENV === "production" ? "unix" : "windows"]
+    "linebreak-style": [
+      "error",
+      process.env.NODE_ENV === "production" ? "unix" : "windows"
+    ],
+    'no-alert': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    "no-underscore-dangle": ["error", { "allow": ["__public"] }],
+    "no-unused-vars": ["error", { "args": "none" }]
   }
 };

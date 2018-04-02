@@ -1,4 +1,7 @@
 const dotenv = require('dotenv');
+const db = require('./db');
+const server = require('./server');
+const session = require('./session');
 
 dotenv.config();
 
@@ -13,10 +16,10 @@ dotenv.config();
 });
 
 const config = {
-  db: require('./db'),
+  db,
   env: String(process.env.NODE_ENV),
-  server: require('./server'),
-  session: require('./session')
+  server,
+  session
 };
 
 module.exports = config;

@@ -9,6 +9,7 @@
     "url": "git@github.com:JBreit/innermind-www.git"
   },
   "scripts": {
+    "eslint": "eslint **/*.js --ignore-pattern node_modules/",
     "start": "nodemon ./.bin/www.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +24,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "csurf": "^1.9.0",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "hbs": "^4.0.1",

@@ -1,13 +1,12 @@
 const http = require('http');
-const path = require('path');
 const config = require('../config');
 const app = require('../app');
 const logger = require('../utils/logger');
 
 const normalizePort = (value) => {
-  let port = parseInt(value, 10);
+  const port = parseInt(value, 10);
 
-  if (isNaN(port)) {
+  if (Number.isNaN(port)) {
     return value;
   }
 
@@ -18,13 +17,18 @@ const normalizePort = (value) => {
   return false;
 };
 
-const onListening = () => {
-  let addr = server.address();
-  let bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
+const server = http.createServer(app);
 
-  logger.info(`> Server listening at http://${addr.address}:${addr.port}.\n`)
+const { host } = config.server;
+const port = normalizePort(config.server.port);
+
+const onListening = () => {
+  const addr = server.address();
+  // const bind = typeof addr === 'string'
+  //   ? 'pipe ' + addr
+  //   : 'port ' + addr.port;
+
+  logger.info(`> Server listening at http://${addr.address}:${addr.port}.\n`);
 };
 
 const onError = (err) => {
@@ -32,17 +36,17 @@ const onError = (err) => {
     throw err;
   }
 
-  let bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string'
+    ? `Pipe ${port}`
+    : `Port ${port}`;
 
   switch (err.code) {
     case 'EACCES':
-      process.stderr.write(bind + ' requires elevated privileges');
+      process.stderr.write(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      process.stderr.write(bind + ' is already in use');
+      process.stderr.write(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -50,12 +54,7 @@ const onError = (err) => {
   }
 };
 
-const server = http.createServer(app);
-
 server.on('listening', onListening);
 server.on('error', onError);
-
-const host = config.server.host;
-const port = normalizePort(config.server.port);
 
 server.listen(port, host);
