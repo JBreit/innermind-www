@@ -29,6 +29,7 @@ const blocks = {};
 
 hbs.registerHelper('extend', (name, context) => {
   let block = blocks[name];
+
   if (!block) {
     blocks[name] = [];
     block = blocks[name];
@@ -98,5 +99,13 @@ app.use((err, req, res, next) => {
     error: err
   });
 });
+
+if (!module.parent) {
+  app.listen(
+    config.server.port,
+    config.server.host,
+    () => logger.info(`> Server listening at http://${config.server.host}:${config.server.port}.\n`)
+  );
+}
 
 module.exports = app;
