@@ -13,14 +13,10 @@ dotenv.config();
 });
 
 const config = {
-  db: {
-    url: String('mongodb://127.0.0.1:27017/innermind')
-  },
+  db: require('./db'),
   env: String(process.env.NODE_ENV),
-  server: {
-    host: String(process.env.HOST),
-    port: Number(process.env.PORT)
-  }
+  server: require('./server'),
+  session: require('./session')
 };
 
 module.exports = config;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.status(200).render('index.hbs', {
+  res.status(200).render('index', {
     title: 'Inner Mind Consulting'
   });
 });
